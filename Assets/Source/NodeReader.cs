@@ -2,25 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeReader : MonoBehaviour {
+public class NodeReader : MonoBehaviour
+{
 
 	[SerializeField]
 	private NodeData initialNode = null;
 	[SerializeField]
-	private NodeData currentNode = null;
-	[SerializeField]
 	private GameObject ellipsis = null;
-	private float startTimeOfCurrentNode = 0f;
+	[SerializeField]
+	private float minOptionInputDelay = 4f;
+	private bool debugIsShowingOptions = false;
+	private NodeData currentNode = null;
 
-	private void Awake ()
+	private void Awake()
 	{
 		if (GameManager.instance != null)
 		{
 			GameManager.instance.enterStateEvent += OnEnterState;
 		}
 	}
-	
-	private void OnEnterState (GameState state)
+
+	private void OnEnterState(GameState state)
 	{
 		switch (state)
 		{
@@ -46,41 +48,91 @@ public class NodeReader : MonoBehaviour {
 		if (nodeData != null && currentNode != nodeData)
 		{
 			currentNode = nodeData;
-			//2 Add the node's comments to the vertical layout group one at a time, with delays
-
-			//3 Once the comments are done, show the dialog options, then delay before the input times-out.
-
-			//4 If the options times out, then just move onto the default node AND hide/remove current options
-			//DisplayNode(nodeData.defaultResultNode);
+			StartCoroutine(ProcessNodeData(nodeData));
 		}
 	}
 
-	private IEnumerator DisplayNodeComments(NodeData nodeData)
+	private IEnumerator ProcessNodeData(NodeData nodeData)
 	{
+		if (debugIsShowingOptions)
+		{
+			yield return new WaitForSeconds(minOptionInputDelay);	
+		}
 		foreach (NodeData.CommentData commentData in nodeData.comments)
 		{
+			//The pause before the ellipsis appears:
 			yield return new WaitForSeconds(commentData.ellipsisDelay);
-			yield return new WaitForSeconds(commentData.initialDelay);
+			ShowEllipsis();
+			//The pause after the ellipsis appears, before the next comment is shown:
+			yield return new WaitForSeconds(commentData.endDelay);
+			HideEllipsis();
+			//Hide any latantly displaying options:
+			HideOptions();
+			//Actually add the comment to the feed:
+			AddComment(commentData);
 		}
+		//Now that all comments from this node have been shown, show the player their options:
+		DisplayOptions(nodeData.options);
+		//Begin showing the default next node. A player input should interrupt this.
+		DisplayNode(nodeData.defaultResultNode);
 	}
 
-	private void Update()
+	public void AddComment(NodeData.CommentData commentData)
 	{
-		if (currentNode)
+		//TODO: Create comment oject based on data contents. Add to UI list.
+		if (commentData != null && commentData.character != null)
 		{
-			if (Time.time > startTimeOfCurrentNode + currentNode.endDelay)
-			{
-				ellipsis.SetActive(false);
-			}
-			else if (!ellipsis.activeSelf && Time.time > startTimeOfCurrentNode + currentNode.ellipsisDelay)
-			{
-				ellipsis.SetActive(true);
-			}
+			Debug.LogFormat("Add Comment: {0} says \"{1}\"", commentData.character.displayName, commentData.text);
 		}
 	}
 
-	public void OnOptionChosen (NodeData.OptionData option)
+	public void DisplayOptions(NodeData.OptionData[] options)
 	{
+		if (!debugIsShowingOptions)
+		{
+			debugIsShowingOptions = true;
+			//TODO: Show dialog options based on stored data.
+			Debug.Log("Display Options");
+		}
+	}
+
+	public void HideOptions()
+	{
+		if (debugIsShowingOptions)
+		{
+			debugIsShowingOptions = false;
+			//TODO: Hide the options UI
+			Debug.Log("Hide Options");
+		}
+	}
+
+	private void ShowEllipsis()
+	{
+		//TODO: Should be in a UI script
+		if (ellipsis != null && !ellipsis.activeSelf)
+		{
+			//TODO: Drop ellipsis to the bottom of the comment list UI
+			//TODO: Animate ellipsis here
+			ellipsis.SetActive(true);
+		}
+	}
+
+	private void HideEllipsis()
+	{
+		//TODO: Should be in a UI script
+		if (ellipsis != null && ellipsis.activeSelf)
+		{
+			ellipsis.SetActive(false);
+		}
+	}
+
+	public void OnOptionChosen(NodeData.OptionData option)
+	{
+		//Interrupt the crrent node:
+		StopAllCoroutines();
+		HideOptions();
+		ellipsis.SetActive(false);
+		//Show the next node specified by the chosen option:
 		if (option != null)
 		{
 			if (option.resultNode != null)
@@ -92,10 +144,7 @@ public class NodeReader : MonoBehaviour {
 				GameManager.instance.SetState(GameState.END);
 				currentNode = null;
 			}
-			if (ellipsis.activeSelf)
-			{
-				ellipsis.SetActive(false);
-			}
+			HideEllipsis();
 		}
 	}
 }

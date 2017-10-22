@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterData : ScriptableObject {
+public class CharacterData : ScriptableObject
+{
 	public Sprite avatar = null;
-	public string handle = "";
-    [TextArea]
+	private string _displayName = "";
+	public string displayName { get { return "@" + (string.IsNullOrEmpty(_displayName) ? name : _displayName); } }
+	[TextArea]
 	public string bio;
 }

@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (currentGameState != state)
 		{
+			Debug.Log("Moving from " + currentGameState + " state to " + state + " state.");
 			if (leaveStateEvent != null)
 			{
 				leaveStateEvent(currentGameState);
