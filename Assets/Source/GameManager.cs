@@ -1,41 +1,21 @@
 ﻿using Action = System.Action;
 using System.Collections;
 using UnityEngine;
-namespace Project
+public class GameManager : MonoBehaviour
 {
-	public class GameManager : MonoBehaviour
-	{
-		private static bool isInMatch;
-		public static event Action OnMatchBeginEvent;
-		public static event Action OnMatchEndEvent;
-		public static void BeginMatch()
-		{
-			if (OnMatchBeginEvent != null)
-			{
-				OnMatchBeginEvent();
-			}
-			isInMatch = true;
+	public enum GameState {NONE, INTRO, GAME, END}
+	private GameState _currentGameState = GameState.NONE;
+	public static event Action enterStateEvent;
+	public static event Action<float> leaveStateEvent;	
+	public GameState currentGameState {
+		get{
+			return _currentGameState;
 		}
-		public static void EndMatch()
+		set
 		{
-			if (OnMatchEndEvent != null)
+			if (_currentGameState != value)
 			{
-				OnMatchEndEvent();
-			}
-			isInMatch = false;
-		}
-		private void Update()
-		{
-			if (Input.GetKeyDown(KeyCode.Escape))
-			{
-				if (isInMatch)
-				{
-					EndMatch();
-				}
-				else
-				{
-					Application.Quit();
-				}
+				_currentGameState = value;
 			}
 		}
 	}
