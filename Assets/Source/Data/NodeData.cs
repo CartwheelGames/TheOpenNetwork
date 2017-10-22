@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum OptionValue {NONE, NEGATIVE, CONFRONTATIONAL, POSITIVE}
+public enum OptionValue {NONE, AGGRESSIVE, BYSTANDER, CONFRONTATIONAL, SUPPORTIVE}
 
 public class NodeData : ScriptableObject
 {

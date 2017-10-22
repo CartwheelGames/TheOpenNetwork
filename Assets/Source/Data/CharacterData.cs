@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterData : ScriptableObject
 {
 	public Sprite avatar = null;
+	[SerializeField]
 	private string _displayName = "";
 	public string displayName { get { return "@" + (string.IsNullOrEmpty(_displayName) ? name : _displayName); } }
 	[TextArea]
