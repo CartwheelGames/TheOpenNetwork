@@ -13,8 +13,8 @@ public class ButtonCommands : MonoBehaviour {
 
 	public void OnSend(){
 		comment = commentBox.text;
-		Instantiate (commentImage, new Vector2 (0, 0), Quaternion.identity);
-
+		Instantiate (commentImage, new Vector3 (0, 0,0), Quaternion.identity);
+		commentImage.transform.SetParent (GameObject.FindGameObjectWithTag ("Canvas").transform, false);
 		//
 		Debug.Log(comment);
 
