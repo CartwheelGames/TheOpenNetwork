@@ -11,6 +11,8 @@ public class NodeReader : MonoBehaviour
 	private TimeoutIndicator timeoutIndicator = null;
 	[SerializeField]
 	private float minOptionInputDelay = 4f;
+	[SerializeField]
+	private CommentFeed commentFeed = null;
 	private bool debugIsShowingOptions = false;
 	private NodeData currentNode = null;
 
@@ -67,7 +69,7 @@ public class NodeReader : MonoBehaviour
 			//Hide any latantly displaying options:
 			HideOptions();
 			//Actually add the comment to the feed:
-			AddComment(commentData);
+			commentFeed.AddComment(commentData);
 		}
 		//Now that all comments from this node have been shown, show the player their options:
 		DisplayOptions(nodeData.options);

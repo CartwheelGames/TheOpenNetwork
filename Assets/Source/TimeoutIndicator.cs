@@ -13,7 +13,7 @@ public class TimeoutIndicator : MonoBehaviour {
 		if (messageText && !string.IsNullOrEmpty(characterName))
 		{
 			messageText.text = string.Format("{0} is typing", characterName);
-			//TODO: Drop to the bottom of the list
+			transform.SetAsLastSibling();
 			gameObject.SetActive(true);
 		}
 	}
