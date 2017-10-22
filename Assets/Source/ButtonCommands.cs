@@ -5,18 +5,26 @@ using UnityEngine.UI;
 
 public class ButtonCommands : MonoBehaviour {
 
-	public GameObject commentImage;
-	public InputField commentBox;
-	public string comment;
+	public GameObject textBox;
+	public Button myButton;
+	public string comment = "";
 	//
-	//public Button myButton;
+	public float delay = 0.1f;
+	public string fullText;
+
+	void Start(){
+		myButton.onClick.AddListener (OnSend);
+	}
 
 	public void OnSend(){
-		comment = commentBox.text;
-		Instantiate (commentImage, new Vector3 (0, 0,0), Quaternion.identity);
-		commentImage.transform.SetParent (GameObject.FindGameObjectWithTag ("Canvas").transform, false);
-		//
-		Debug.Log(comment);
+		StartCoroutine(ShowText());
+	}
 
+	IEnumerator ShowText(){
+		for (int i = 0; i < fullText.Length; i++) {
+			comment = fullText.Substring (0, i);
+			this.GetComponent<Text> ().text = comment;
+			yield return new WaitForSeconds (delay);
+		}
 	}
 }
