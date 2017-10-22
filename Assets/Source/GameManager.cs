@@ -9,9 +9,13 @@ public class GameManager : MonoBehaviour
 	private GameState currentGameState = GameState.NONE;
 	public event Action<GameState> enterStateEvent;
 	public event Action<GameState> leaveStateEvent;
-	private void Start()
+	private void Awake()
 	{
 		instance = this;
+	}
+	private void Start()
+	{
+		SetState(GameState.GAME);
 	}
 	public GameState GetCurrentState()
 	{

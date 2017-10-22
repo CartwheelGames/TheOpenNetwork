@@ -9,6 +9,8 @@ public class NodeData : ScriptableObject
 	public DialogOption[] options = new DialogOption[0];
 	public float endDelay = 0;
 	public float ellipseDelay = 0;
+	public bool isEndNode = false;
+	public NodeData defaultResultNode = null;
 
 	[System.Serializable]
 	public class Comment
