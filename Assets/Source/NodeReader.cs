@@ -8,7 +8,7 @@ public class NodeReader : MonoBehaviour
 	[SerializeField]
 	private NodeData initialNode = null;
 	[SerializeField]
-	private GameObject ellipsis = null;
+	private TimeoutIndicator timeoutIndicator = null;
 	[SerializeField]
 	private float minOptionInputDelay = 4f;
 	private bool debugIsShowingOptions = false;
@@ -38,8 +38,6 @@ public class NodeReader : MonoBehaviour
 
 	private void Initialize()
 	{
-		//1 Clear all existing text and stuff from the UI
-
 		DisplayNode(initialNode);
 	}
 
@@ -60,9 +58,9 @@ public class NodeReader : MonoBehaviour
 		}
 		foreach (NodeData.CommentData commentData in nodeData.comments)
 		{
-			//The pause before the ellipsis appears:
+			//The pause before the timeout indicator appears:
 			yield return new WaitForSeconds(commentData.ellipsisDelay);
-			ShowEllipsis();
+			ShowTimeoutWithName(commentData.character.displayName);
 			//The pause after the ellipsis appears, before the next comment is shown:
 			yield return new WaitForSeconds(commentData.endDelay);
 			HideEllipsis();
@@ -106,23 +104,21 @@ public class NodeReader : MonoBehaviour
 		}
 	}
 
-	private void ShowEllipsis()
+	private void ShowTimeoutWithName(string characterName)
 	{
 		//TODO: Should be in a UI script
-		if (ellipsis != null && !ellipsis.activeSelf)
+		if (timeoutIndicator != null && !timeoutIndicator.gameObject.activeSelf)
 		{
-			//TODO: Drop ellipsis to the bottom of the comment list UI
-			//TODO: Animate ellipsis here
-			ellipsis.SetActive(true);
+			timeoutIndicator.ShowWithName(characterName);
 		}
 	}
 
 	private void HideEllipsis()
 	{
 		//TODO: Should be in a UI script
-		if (ellipsis != null && ellipsis.activeSelf)
+		if (timeoutIndicator != null && timeoutIndicator.gameObject.activeSelf)
 		{
-			ellipsis.SetActive(false);
+			timeoutIndicator.Hide();
 		}
 	}
 
@@ -131,7 +127,7 @@ public class NodeReader : MonoBehaviour
 		//Interrupt the crrent node:
 		StopAllCoroutines();
 		HideOptions();
-		ellipsis.SetActive(false);
+		timeoutIndicator.Hide();
 		//Show the next node specified by the chosen option:
 		if (option != null)
 		{
