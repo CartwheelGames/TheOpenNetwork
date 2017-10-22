@@ -50,6 +50,7 @@ public class NodeReader : MonoBehaviour
 
 	private void Initialize()
 	{
+		Debug.Log("Init");
 		DisplayNode(initialNode);
 	}
 
