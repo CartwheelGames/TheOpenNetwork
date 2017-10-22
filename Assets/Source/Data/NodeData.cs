@@ -4,25 +4,23 @@ using UnityEngine;
 
 public class NodeData : ScriptableObject
 {
-    public string data = "";
-	public Comment[] comments = new Comment[0];
-	public DialogOption[] options = new DialogOption[0];
-	public float endDelay = 0;
-	public float ellipseDelay = 0;
-	public bool isEndNode = false;
+	public string data = "";
+	public CommentData[] comments = new CommentData[0];
+	public OptionData[] options = new OptionData[0];
 	public NodeData defaultResultNode = null;
 
 	[System.Serializable]
-	public class Comment
+	public class CommentData
 	{
-		public float initialDelay = 0;
-		public float ellipseDelay = 0;
+		public float endDelay = 1f;
+		public float ellipsisDelay = 1f;
 		public CharacterData character = null;
+		[TextArea]
 		public string text = "";
 	}
 
 	[System.Serializable]
-	public class DialogOption
+	public class OptionData
 	{
 		public string previewText = "";
 		public string fullText = "";

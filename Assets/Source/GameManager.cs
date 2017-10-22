@@ -2,10 +2,12 @@
 using System.Collections;
 using UnityEngine;
 using System;
+
+public enum GameState {NONE, INTRO, GAME, END}
+
 public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
-	public enum GameState {NONE, INTRO, GAME, END}
 	private GameState currentGameState = GameState.NONE;
 	public event Action<GameState> enterStateEvent;
 	public event Action<GameState> leaveStateEvent;
@@ -25,6 +27,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (currentGameState != state)
 		{
+			Debug.Log("Moving from " + currentGameState + " state to " + state + " state.");
 			if (leaveStateEvent != null)
 			{
 				leaveStateEvent(currentGameState);
