@@ -1,22 +1,35 @@
 ﻿using Action = System.Action;
 using System.Collections;
 using UnityEngine;
+using System;
 public class GameManager : MonoBehaviour
 {
+	public static GameManager instance;
 	public enum GameState {NONE, INTRO, GAME, END}
-	private GameState _currentGameState = GameState.NONE;
-	public static event Action enterStateEvent;
-	public static event Action<float> leaveStateEvent;	
-	public GameState currentGameState {
-		get{
-			return _currentGameState;
-		}
-		set
+	private GameState currentGameState = GameState.NONE;
+	public event Action<GameState> enterStateEvent;
+	public event Action<GameState> leaveStateEvent;
+	private void Start()
+	{
+		instance = this;
+	}
+	public GameState GetCurrentState()
+	{
+		return currentGameState;
+	}
+	public void SetState(GameState state)
+	{
+		if (currentGameState != state)
 		{
-			if (_currentGameState != value)
+			if (leaveStateEvent != null)
 			{
-				_currentGameState = value;
+				leaveStateEvent(currentGameState);
 			}
+			if (enterStateEvent != null)
+			{
+				enterStateEvent(state);
+			}
+			currentGameState = state;
 		}
 	}
 }
