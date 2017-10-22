@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using System;
 
-public enum GameState {NONE, INTRO, GAME, END}
+public enum GameState { NONE, INTRO, GAME, END }
 
 public class GameManager : MonoBehaviour
 {
@@ -37,6 +37,13 @@ public class GameManager : MonoBehaviour
 				enterStateEvent(state);
 			}
 			currentGameState = state;
+		}
+	}
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
 		}
 	}
 }
