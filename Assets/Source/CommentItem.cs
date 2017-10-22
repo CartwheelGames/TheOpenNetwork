@@ -15,9 +15,9 @@ public class CommentItem : MonoBehaviour
 	{
 		if (commentData != null)
 		{
-			if (contentLabel != null && !string.IsNullOrEmpty(commentData.text))
+			if (contentLabel != null && commentData.character && !string.IsNullOrEmpty(commentData.text))
 			{
-				contentLabel.text = commentData.text;
+				contentLabel.text = "<b><color=darkblue>" + commentData.character.displayName + ":</color></b> " + commentData.text;
 			}
 			if (avatarRenderer && commentData.character && commentData.character.avatar)
 			{
@@ -25,7 +25,7 @@ public class CommentItem : MonoBehaviour
 			}
 			if (timeStampLabel != null)
 			{
-				contentLabel.text = timestamp.ToShortDateString();
+				timeStampLabel.text = timestamp.ToShortTimeString();
 			}
 		}
 	}

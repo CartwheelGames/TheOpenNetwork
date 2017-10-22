@@ -83,7 +83,7 @@ public class NodeReader : MonoBehaviour
 		DisplayNode(nodeData.defaultResultNode);
 	}
 
-	public void ShowOptions(NodeData.OptionData[] options)
+	public void ShowOptions(OptionData[] options)
 	{
 		if (!optionsDisplay.isInputEnabled)
 		{
@@ -101,7 +101,7 @@ public class NodeReader : MonoBehaviour
 		}
 	}
 
-	public void OnOptionChosen(NodeData.OptionData option)
+	public void OnOptionChosen(OptionData option)
 	{
 		if (option != null)
 		{
