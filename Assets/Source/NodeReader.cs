@@ -60,10 +60,10 @@ public class NodeReader : MonoBehaviour
 		{
 			//The pause before the timeout indicator appears:
 			yield return new WaitForSeconds(commentData.ellipsisDelay);
-			ShowTimeoutWithName(commentData.character.displayName);
-			//The pause after the ellipsis appears, before the next comment is shown:
+			ShowTimeoutIndicator(commentData.character.displayName);
+			//The pause after the timeout indicator appears, before the next comment is shown:
 			yield return new WaitForSeconds(commentData.endDelay);
-			HideEllipsis();
+			HideTimeoutIndicator();
 			//Hide any latantly displaying options:
 			HideOptions();
 			//Actually add the comment to the feed:
@@ -104,33 +104,14 @@ public class NodeReader : MonoBehaviour
 		}
 	}
 
-	private void ShowTimeoutWithName(string characterName)
-	{
-		//TODO: Should be in a UI script
-		if (timeoutIndicator != null && !timeoutIndicator.gameObject.activeSelf)
-		{
-			timeoutIndicator.ShowWithName(characterName);
-		}
-	}
-
-	private void HideEllipsis()
-	{
-		//TODO: Should be in a UI script
-		if (timeoutIndicator != null && timeoutIndicator.gameObject.activeSelf)
-		{
-			timeoutIndicator.Hide();
-		}
-	}
-
 	public void OnOptionChosen(NodeData.OptionData option)
 	{
-		//Interrupt the crrent node:
-		StopAllCoroutines();
-		HideOptions();
-		timeoutIndicator.Hide();
-		//Show the next node specified by the chosen option:
 		if (option != null)
 		{
+			//Interrupt the crrent node:
+			StopAllCoroutines();
+			HideOptions();
+			//Show the next node specified by the chosen option:
 			if (option.resultNode != null)
 			{
 				DisplayNode(option.resultNode);
@@ -140,7 +121,22 @@ public class NodeReader : MonoBehaviour
 				GameManager.instance.SetState(GameState.END);
 				currentNode = null;
 			}
-			HideEllipsis();
+			HideTimeoutIndicator();
+		}
+	}
+
+	private void ShowTimeoutIndicator(string characterName)
+	{
+		if (timeoutIndicator != null)
+		{
+			timeoutIndicator.ShowWithName(characterName);
+		}
+	}
+	private void HideTimeoutIndicator()
+	{
+		if (timeoutIndicator != null)
+		{
+			timeoutIndicator.Hide();
 		}
 	}
 }
