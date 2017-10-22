@@ -6,13 +6,13 @@ public class TimeoutIndicator : MonoBehaviour {
 	[SerializeField]
 	private Image ellipsis;
 	[SerializeField]
-	private Text messageText = null;
+	private Text label = null;
 
 	public void ShowWithName (string characterName)
 	{
-		if (messageText && !string.IsNullOrEmpty(characterName))
+		if (label && !string.IsNullOrEmpty(characterName))
 		{
-			messageText.text = string.Format("{0} is typing", characterName);
+			label.text = string.Format("{0} is typing", characterName);
 			transform.SetAsLastSibling();
 			gameObject.SetActive(true);
 		}
