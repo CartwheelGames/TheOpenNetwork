@@ -5,20 +5,18 @@ using UnityEngine.UI;
 
 public class ButtonCommands : MonoBehaviour {
 
-	public Button myButton;
+	public GameObject commentImage;
+	public InputField commentBox;
+	public string comment;
+	//
+	//public Button myButton;
 
-	void Start(){
-		myButton.onClick.AddListener (AceComment);
-	}
+	public void OnSend(){
+		comment = commentBox.text;
+		Instantiate (commentImage, new Vector2 (0, 0), Quaternion.identity);
 
-	void AceComment(){
-		Debug.Log ("Hello! Hello!");
 		//
-		OnGUI();
-		//GUI.Button(new Rect(10,10,50,50), "Response");
-	}
+		Debug.Log(comment);
 
-	void OnGUI(){
-		GUI.Button(new Rect(10,10,50,50), "Response");
 	}
 }
