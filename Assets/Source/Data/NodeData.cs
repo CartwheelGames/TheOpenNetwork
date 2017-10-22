@@ -20,13 +20,4 @@ public class NodeData : ScriptableObject
 		[TextArea]
 		public string text = "";
 	}
-
-	[System.Serializable]
-	public class OptionData
-	{
-		public string previewText = "";
-		public string fullText = "";
-		public NodeData resultNode = null;
-		public OptionValue value;
-	}
 }

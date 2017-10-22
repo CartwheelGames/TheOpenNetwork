@@ -9,7 +9,7 @@ public class OptionsDisplay : MonoBehaviour
 	[SerializeField]
 	private OptionItem[] optionItems = new OptionItem[0];
 	[SerializeField]
-	public event Action<NodeData.OptionData> onOptionChosenEvent;
+	public event Action<OptionData> onOptionChosenEvent;
 	public bool isInputEnabled { get; private set; }
 
 	private void Start()
@@ -30,7 +30,7 @@ public class OptionsDisplay : MonoBehaviour
 		isInputEnabled = false;
 	}
 
-	public void SetupOptions(NodeData.OptionData[] options)
+	public void SetupOptions(OptionData[] options)
 	{
 		for (int i = 0; i < optionItems.Length; i++)
 		{
@@ -83,7 +83,7 @@ public class OptionsDisplay : MonoBehaviour
 		private Button button = null;
 		[SerializeField]
 		private Text label = null;
-		public NodeData.OptionData optionData { get; private set; }
+		public OptionData optionData { get; private set; }
 		public bool isEnabled = false;
 		private Action<OptionItem> choiceCallback;
 		public void Initialize(Action<OptionItem> choiceAction)
@@ -100,7 +100,7 @@ public class OptionsDisplay : MonoBehaviour
 			choiceCallback(this);
 		}
 
-		public void Setup(NodeData.OptionData rawOptionData)
+		public void Setup(OptionData rawOptionData)
 		{
 			isEnabled = true;
 			optionData = rawOptionData;
