@@ -3,7 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NodeReader : MonoBehaviour {
-	public NodeData initialNode = null;
+
+	[SerializeField]
+	private NodeData initialNode = null;
+	[SerializeField]
+	private NodeData currentNode = null;
+	[SerializeField]
+	private GameObject ellipsis = null;
+	private float startTimeOfCurrentNode = 0f;
+
 	private void Awake ()
 	{
 		if (GameManager.instance != null)
@@ -12,16 +20,16 @@ public class NodeReader : MonoBehaviour {
 		}
 	}
 	
-	private void OnEnterState (GameManager.GameState state)
+	private void OnEnterState (GameState state)
 	{
 		switch (state)
 		{
-			case GameManager.GameState.INTRO:
+			case GameState.INTRO:
 				break;
-			case GameManager.GameState.END:
-				break;
-			case GameManager.GameState.GAME:
+			case GameState.GAME:
 				Initialize();
+				break;
+			case GameState.END:
 				break;
 		}
 	}
@@ -35,25 +43,58 @@ public class NodeReader : MonoBehaviour {
 
 	private void DisplayNode(NodeData nodeData)
 	{
-		//2 Add the node's comments to the vertical layout group one at a time, with delays
+		if (nodeData != null && currentNode != nodeData)
+		{
+			currentNode = nodeData;
+			//2 Add the node's comments to the vertical layout group one at a time, with delays
 
-		//3 Once the comments are done, show the dialog options, then delay before the input times-out.
+			//3 Once the comments are done, show the dialog options, then delay before the input times-out.
 
-		//4 If the options times out, then just move onto the default node AND hide/remove current options
-		//DisplayNode(nodeData.defaultResultNode);
+			//4 If the options times out, then just move onto the default node AND hide/remove current options
+			//DisplayNode(nodeData.defaultResultNode);
+		}
 	}
 
-	public void OnOptionChosen (NodeData.DialogOption option)
+	private IEnumerator DisplayNodeComments(NodeData nodeData)
 	{
-		if (option != null && option.resultNode != null)
+		foreach (NodeData.CommentData commentData in nodeData.comments)
 		{
-			if (option.resultNode.isEndNode)
+			yield return new WaitForSeconds(commentData.ellipsisDelay);
+			yield return new WaitForSeconds(commentData.initialDelay);
+		}
+	}
+
+	private void Update()
+	{
+		if (currentNode)
+		{
+			if (Time.time > startTimeOfCurrentNode + currentNode.endDelay)
 			{
-				GameManager.instance.SetState(GameManager.GameState.END);
+				ellipsis.SetActive(false);
+			}
+			else if (!ellipsis.activeSelf && Time.time > startTimeOfCurrentNode + currentNode.ellipsisDelay)
+			{
+				ellipsis.SetActive(true);
+			}
+		}
+	}
+
+	public void OnOptionChosen (NodeData.OptionData option)
+	{
+		if (option != null)
+		{
+			if (option.resultNode != null)
+			{
+				DisplayNode(option.resultNode);
 			}
 			else
 			{
-				DisplayNode(option.resultNode);
+				GameManager.instance.SetState(GameState.END);
+				currentNode = null;
+			}
+			if (ellipsis.activeSelf)
+			{
+				ellipsis.SetActive(false);
 			}
 		}
 	}
