@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NodeReader : MonoBehaviour
 {
+	[SerializeField]
+	private CharacterData playerCharacter = null;
 	[SerializeField]
 	private NodeData initialNode = null;
 	[SerializeField]
@@ -14,7 +17,8 @@ public class NodeReader : MonoBehaviour
 	private CommentFeed commentFeed = null;
 	[SerializeField]
 	private OptionsDisplay optionsDisplay = null;
-	private bool debugIsShowingOptions = false;
+	[SerializeField]
+	private ScrollRect scrollRect;
 	private NodeData currentNode = null;
 	private Dictionary<OptionValue, int> scoreTracker = new Dictionary<OptionValue, int>();
 
@@ -60,9 +64,9 @@ public class NodeReader : MonoBehaviour
 
 	private IEnumerator ProcessNodeData(NodeData nodeData)
 	{
-		if (debugIsShowingOptions)
+		if (optionsDisplay && optionsDisplay.isInputEnabled)
 		{
-			yield return new WaitForSeconds(minOptionInputDelay);	
+			yield return new WaitForSeconds(minOptionInputDelay);
 		}
 		foreach (NodeData.CommentData commentData in nodeData.comments)
 		{
@@ -75,7 +79,12 @@ public class NodeReader : MonoBehaviour
 			//Hide any latantly displaying options:
 			HideOptions();
 			//Actually add the comment to the feed:
-			commentFeed.AddComment(commentData);
+			commentFeed.AddComment(commentData.character, commentData.text);
+			if (scrollRect)
+			{
+				scrollRect.velocity = Vector2.zero;
+				scrollRect.normalizedPosition = Vector2.zero;
+			}
 		}
 		//Now that all comments from this node have been shown, show the player their options:
 		ShowOptions(nodeData.options);
@@ -85,19 +94,17 @@ public class NodeReader : MonoBehaviour
 
 	public void ShowOptions(OptionData[] options)
 	{
-		if (!optionsDisplay.isInputEnabled)
+		if (optionsDisplay != null)
 		{
-			optionsDisplay.EnableInput();
-			Debug.Log("Display Options");
+			optionsDisplay.SetupOptions(options);
 		}
 	}
 
 	public void HideOptions()
 	{
-		if (optionsDisplay.isInputEnabled)
+		if (optionsDisplay != null)
 		{
-			optionsDisplay.DisableInput();
-			Debug.Log("Hide Options");
+			optionsDisplay.Hide();
 		}
 	}
 
@@ -118,16 +125,27 @@ public class NodeReader : MonoBehaviour
 				GameManager.instance.SetState(GameState.END);
 				currentNode = null;
 			}
-			
+			commentFeed.AddComment(playerCharacter, option.fullText);
 			AddToScore(option.value);
-
 			HideTimeoutIndicator();
+			if (scrollRect)
+			{
+				scrollRect.velocity = Vector2.zero;
+				scrollRect.normalizedPosition = Vector2.zero;
+			}
 		}
 	}
 
 	private void AddToScore(OptionValue value)
 	{
-		scoreTracker[value]++;
+		if (scoreTracker.ContainsKey(value))
+		{
+			scoreTracker[value]++;
+		}
+		else
+		{
+			scoreTracker.Add(value, 1);
+		}
 	}
 
 	private void ShowTimeoutIndicator(string characterName)

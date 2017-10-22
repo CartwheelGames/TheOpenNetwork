@@ -20,18 +20,21 @@ public class OptionsDisplay : MonoBehaviour
 		}
 	}
 
-	public void EnableInput()
-	{
-		isInputEnabled = true;
-	}
-
-	public void DisableInput()
+	public void Hide()
 	{
 		isInputEnabled = false;
+		foreach (OptionItem item in optionItems)
+		{
+			if (item != null)
+			{
+				item.Disable();
+			}
+		}
 	}
 
 	public void SetupOptions(OptionData[] options)
 	{
+		isInputEnabled = true;
 		for (int i = 0; i < optionItems.Length; i++)
 		{
 			if (i < options.Length)
@@ -84,7 +87,7 @@ public class OptionsDisplay : MonoBehaviour
 		[SerializeField]
 		private Text label = null;
 		public OptionData optionData { get; private set; }
-		public bool isEnabled = false;
+		public bool isEnabled { get; private set; }
 		private Action<OptionItem> choiceCallback;
 		public void Initialize(Action<OptionItem> choiceAction)
 		{
@@ -93,6 +96,7 @@ public class OptionsDisplay : MonoBehaviour
 			{
 				button.onClick.AddListener(OnClickButton);
 			}
+			Disable();
 		}
 
 		private void OnClickButton()
@@ -103,14 +107,17 @@ public class OptionsDisplay : MonoBehaviour
 		public void Setup(OptionData rawOptionData)
 		{
 			isEnabled = true;
-			optionData = rawOptionData;
-			if (label != null)
+			if (rawOptionData)
 			{
-				label.text = optionData.previewText;
-			}
-			if (button != null)
-			{
-				button.gameObject.SetActive(true);
+				optionData = rawOptionData;
+				if (label != null)
+				{
+					label.text = optionData.previewText;
+				}
+				if (button != null)
+				{
+					button.gameObject.SetActive(true);
+				}
 			}
 		}
 

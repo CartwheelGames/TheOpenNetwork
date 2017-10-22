@@ -9,16 +9,16 @@ public class CommentFeed : MonoBehaviour
 	[SerializeField]
 	private Transform commentContainer;
 
-	public void AddComment(NodeData.CommentData commentData)
+	public void AddComment(CharacterData character, string text)
 	{
-		Debug.LogFormat("Add Comment: {0} says \"{1}\"", commentData.character.displayName, commentData.text);
+		Debug.LogFormat("Add Comment: {0} says \"{1}\"", character.displayName, text);
 		if (commentItemPrefab)
 		{
 			GameObject itemInstance = Instantiate(commentItemPrefab);
 			CommentItem commentItem = itemInstance.GetComponent<CommentItem>();
 			if (commentItem != null)
 			{
-				commentItem.Setup(commentData, System.DateTime.UtcNow);
+				commentItem.Setup(character, text, System.DateTime.UtcNow);
 				commentItem.transform.SetParent(commentContainer);
 				commentItem.transform.SetAsLastSibling();
 			}

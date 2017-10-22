@@ -9,24 +9,21 @@ public class CommentItem : MonoBehaviour
 	private Image avatarRenderer = null;
 	[SerializeField]
 	private Text contentLabel = null;
-	[SerializeField]	
+	[SerializeField]
 	private Text timeStampLabel = null;
-	public void Setup(NodeData.CommentData commentData, System.DateTime timestamp)
+	public void Setup(CharacterData character, string text, System.DateTime timestamp)
 	{
-		if (commentData != null)
+		if (contentLabel != null && character && !string.IsNullOrEmpty(text))
 		{
-			if (contentLabel != null && commentData.character && !string.IsNullOrEmpty(commentData.text))
-			{
-				contentLabel.text = "<b><color=darkblue>" + commentData.character.displayName + ":</color></b> " + commentData.text;
-			}
-			if (avatarRenderer && commentData.character && commentData.character.avatar)
-			{
-				avatarRenderer.sprite = commentData.character.avatar;
-			}
-			if (timeStampLabel != null)
-			{
-				timeStampLabel.text = timestamp.ToShortTimeString();
-			}
+			contentLabel.text = "<b><color=darkblue>" + character.displayName + ":</color></b> " + text;
+		}
+		if (avatarRenderer && character && character.avatar)
+		{
+			avatarRenderer.sprite = character.avatar;
+		}
+		if (timeStampLabel != null)
+		{
+			timeStampLabel.text = timestamp.ToShortTimeString();
 		}
 	}
 }
