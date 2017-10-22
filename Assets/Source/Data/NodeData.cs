@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum OptionValue {NONE, NEGATIVE, CONFRONTATIONAL, POSITIVE}
+
 public class NodeData : ScriptableObject
 {
 	public string data = "";
@@ -25,5 +27,6 @@ public class NodeData : ScriptableObject
 		public string previewText = "";
 		public string fullText = "";
 		public NodeData resultNode = null;
+		public OptionValue value;
 	}
 }

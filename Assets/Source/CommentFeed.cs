@@ -6,6 +6,7 @@ public class CommentFeed : MonoBehaviour
 {
 	[SerializeField]
 	private GameObject commentItemPrefab;
+	[SerializeField]
 	private Transform commentContainer;
 
 	public void AddComment(NodeData.CommentData commentData)

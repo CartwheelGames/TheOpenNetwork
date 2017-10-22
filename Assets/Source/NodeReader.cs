@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class NodeReader : MonoBehaviour
 {
-
 	[SerializeField]
 	private NodeData initialNode = null;
 	[SerializeField]
@@ -13,14 +12,21 @@ public class NodeReader : MonoBehaviour
 	private float minOptionInputDelay = 4f;
 	[SerializeField]
 	private CommentFeed commentFeed = null;
+	[SerializeField]
+	private OptionsDisplay optionsDisplay = null;
 	private bool debugIsShowingOptions = false;
 	private NodeData currentNode = null;
+	private Dictionary<OptionValue, int> scoreTracker = new Dictionary<OptionValue, int>();
 
 	private void Awake()
 	{
 		if (GameManager.instance != null)
 		{
 			GameManager.instance.enterStateEvent += OnEnterState;
+		}
+		if (optionsDisplay != null)
+		{
+			optionsDisplay.onOptionChosenEvent += OnOptionChosen;
 		}
 	}
 
@@ -72,36 +78,25 @@ public class NodeReader : MonoBehaviour
 			commentFeed.AddComment(commentData);
 		}
 		//Now that all comments from this node have been shown, show the player their options:
-		DisplayOptions(nodeData.options);
+		ShowOptions(nodeData.options);
 		//Begin showing the default next node. A player input should interrupt this.
 		DisplayNode(nodeData.defaultResultNode);
 	}
 
-	public void AddComment(NodeData.CommentData commentData)
+	public void ShowOptions(NodeData.OptionData[] options)
 	{
-		//TODO: Create comment oject based on data contents. Add to UI list.
-		if (commentData != null && commentData.character != null)
+		if (!optionsDisplay.isInputEnabled)
 		{
-			Debug.LogFormat("Add Comment: {0} says \"{1}\"", commentData.character.displayName, commentData.text);
-		}
-	}
-
-	public void DisplayOptions(NodeData.OptionData[] options)
-	{
-		if (!debugIsShowingOptions)
-		{
-			debugIsShowingOptions = true;
-			//TODO: Show dialog options based on stored data.
+			optionsDisplay.EnableInput();
 			Debug.Log("Display Options");
 		}
 	}
 
 	public void HideOptions()
 	{
-		if (debugIsShowingOptions)
+		if (optionsDisplay.isInputEnabled)
 		{
-			debugIsShowingOptions = false;
-			//TODO: Hide the options UI
+			optionsDisplay.DisableInput();
 			Debug.Log("Hide Options");
 		}
 	}
@@ -123,8 +118,16 @@ public class NodeReader : MonoBehaviour
 				GameManager.instance.SetState(GameState.END);
 				currentNode = null;
 			}
+			
+			AddToScore(option.value);
+
 			HideTimeoutIndicator();
 		}
+	}
+
+	private void AddToScore(OptionValue value)
+	{
+		scoreTracker[value]++;
 	}
 
 	private void ShowTimeoutIndicator(string characterName)
