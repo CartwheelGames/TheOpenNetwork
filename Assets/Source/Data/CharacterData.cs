@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserCharacterSO : ScriptableObject {
+public class CharacterData : ScriptableObject {
 	public Sprite avatar = null;
 	public string handle = "";
     [TextArea]
