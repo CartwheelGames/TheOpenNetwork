@@ -8,7 +8,8 @@ public class CommentFeed : MonoBehaviour
 	private GameObject commentItemPrefab;
 	[SerializeField]
 	private Transform commentContainer;
-
+	[SerializeField]
+	private Transform bottomSpacer;
 	public void AddComment(CharacterData character, string text)
 	{
 		Debug.LogFormat("Add Comment: {0} says \"{1}\"", character.displayName, text);
@@ -21,7 +22,15 @@ public class CommentFeed : MonoBehaviour
 				commentItem.Setup(character, text, System.DateTime.UtcNow);
 				commentItem.transform.SetParent(commentContainer);
 				commentItem.transform.SetAsLastSibling();
+				MoveSpacerToBottom();
 			}
+		}
+	}
+	public void MoveSpacerToBottom()
+	{
+		if (bottomSpacer != null)
+		{
+			bottomSpacer.SetAsLastSibling();
 		}
 	}
 }

@@ -153,6 +153,7 @@ public class NodeReader : MonoBehaviour
 		if (timeoutIndicator != null)
 		{
 			timeoutIndicator.ShowWithName(characterName);
+			commentFeed.MoveSpacerToBottom();
 		}
 	}
 	private void HideTimeoutIndicator()
