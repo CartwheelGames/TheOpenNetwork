@@ -88,9 +88,9 @@ public class OptionsDisplay : MonoBehaviour
 		[SerializeField]
 		private Text label = null;
 		[SerializeField]
-		private Sprite alternateSprite = null;
-		private Sprite originalSprite = null;
-		private Image buttonImage = null;
+		private Image arrowImage = null;
+		[SerializeField]
+		private Image gamePadImage = null;
 		public OptionData optionData { get; private set; }
 		public bool isEnabled { get; private set; }
 		private Action<OptionItem> choiceCallback;
@@ -100,11 +100,9 @@ public class OptionsDisplay : MonoBehaviour
 			if (button != null)
 			{
 				button.onClick.AddListener(OnClickButton);
-				buttonImage = button.GetComponent<Image>();
-				if (buttonImage != null)
-				{
-					originalSprite = buttonImage.sprite;
-				}
+				button.targetGraphic = arrowImage;
+				arrowImage.enabled = true;
+				gamePadImage.enabled = false;
 			}
 			Disable();
 		}
@@ -128,16 +126,15 @@ public class OptionsDisplay : MonoBehaviour
 				{
 					button.gameObject.SetActive(true);
 					string[] names = Input.GetJoystickNames();
-					if (originalSprite != null)
+					if (names.Length > 0)
 					{
-						if (names.Length > 1 && alternateSprite != null)
-						{
-							buttonImage.sprite = alternateSprite;
-						}
-						else if (originalSprite != null)
-						{
-							buttonImage.sprite = originalSprite;
-						}
+						arrowImage.enabled = false;
+						gamePadImage.enabled = true;
+					}
+					else
+					{
+						arrowImage.enabled = true;
+						gamePadImage.enabled = false;
 					}
 				}
 			}
