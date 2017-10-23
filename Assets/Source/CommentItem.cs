@@ -15,7 +15,7 @@ public class CommentItem : MonoBehaviour
 	{
 		if (contentLabel != null && character && !string.IsNullOrEmpty(text))
 		{
-			contentLabel.text = "<b><color=darkblue>" + character.displayName + ":</color></b> " + text;
+			contentLabel.text = "<color=darkblue>" + character.displayName + ":</color> " + text;
 		}
 		if (avatarRenderer && character && character.avatar)
 		{
