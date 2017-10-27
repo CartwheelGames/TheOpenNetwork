@@ -20,9 +20,7 @@ public class CommentItem : MonoBehaviour
 		if (contentLabel != null && character && !string.IsNullOrEmpty(text))
 		{
 			contentLabel.text = "<color=darkblue>" + character.displayName + ":</color> " + text;
-			//contentLabel.text = "This is just a test.";
-			StartCoroutine (Typing());
-
+			//StartCoroutine (Typing());
 		}
 		if (avatarRenderer && character && character.avatar)
 		{
@@ -34,10 +32,9 @@ public class CommentItem : MonoBehaviour
 		}
 	}
 
-	IEnumerator Typing(){
-		foreach (char c in contentLabel.text) {
-			contentLabel.text += c;
-			yield return new WaitForSeconds (textDelay);
-		}
-	}
+	//IEnumerator Typing(){
+			//foreach (char i in contentLabel.text) {
+			    //contentLabel.text += i;
+				//yield return new WaitForSeconds (textDelay);
+			//}
 }

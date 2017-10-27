@@ -38,10 +38,10 @@ public class NodeReader : MonoBehaviour
 	{
 		switch (state)
 		{
-			case GameState.INTRO:
+		    case GameState.INTRO:
 				break;
 			case GameState.GAME:
-				Initialize();
+			    Initialize();
 				break;
 			case GameState.END:
 				break;

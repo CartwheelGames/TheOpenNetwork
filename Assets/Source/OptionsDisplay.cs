@@ -9,11 +9,20 @@ public class OptionsDisplay : MonoBehaviour
 	[SerializeField]
 	private OptionItem[] optionItems = new OptionItem[0];
 	[SerializeField]
+	private Image userFeed = null;
+	[SerializeField]
+	private Image userIcon = null;
+	[SerializeField]
+	private Text userComment = null;
 	public event Action<OptionData> onOptionChosenEvent;
 	public bool isInputEnabled { get; private set; }
 
 	private void Start()
 	{
+		userFeed.enabled = true;
+		userIcon.enabled = true;
+		userComment.enabled = true;
+		userComment.text = "What's on your mind right now?";
 		foreach (OptionItem item in optionItems)
 		{
 			item.Initialize(ChooseOption);
@@ -23,6 +32,10 @@ public class OptionsDisplay : MonoBehaviour
 	public void Hide()
 	{
 		isInputEnabled = false;
+		//
+		userFeed.enabled = true;
+		userIcon.enabled = true;
+		userComment.enabled = true;
 		foreach (OptionItem item in optionItems)
 		{
 			if (item != null)
@@ -35,6 +48,10 @@ public class OptionsDisplay : MonoBehaviour
 	public void SetupOptions(OptionData[] options)
 	{
 		isInputEnabled = true;
+		//
+		userFeed.enabled = false;
+		userIcon.enabled = false;
+		userComment.enabled = false;
 		string[] gamePadNames = Input.GetJoystickNames();
 		for (int i = 0; i < optionItems.Length; i++)
 		{

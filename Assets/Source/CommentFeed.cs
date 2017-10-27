@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class CommentFeed : MonoBehaviour
+public class CommentFeed : MonoBehaviour 
 {
 	[SerializeField]
 	private GameObject commentItemPrefab;
@@ -12,25 +13,26 @@ public class CommentFeed : MonoBehaviour
 	private Transform bottomSpacer;
 	public void AddComment(CharacterData character, string text)
 	{
-		Debug.LogFormat("Add Comment: {0} says \"{1}\"", character.displayName, text);
-		if (commentItemPrefab)
+		Debug.LogFormat ("Add Comment: {0} says \"{1}\"", character.displayName, text);
+
+		if (commentItemPrefab) 
 		{
-			GameObject itemInstance = Instantiate(commentItemPrefab);
-			CommentItem commentItem = itemInstance.GetComponent<CommentItem>();
+			GameObject itemInstance = Instantiate (commentItemPrefab);
+			CommentItem commentItem = itemInstance.GetComponent<CommentItem> ();
 			if (commentItem != null)
 			{
-				commentItem.Setup(character, text, System.DateTime.UtcNow);
-				commentItem.transform.SetParent(commentContainer);
-				commentItem.transform.SetAsLastSibling();
-				MoveSpacerToBottom();
+				commentItem.Setup (character, text, System.DateTime.UtcNow);
+				commentItem.transform.SetParent (commentContainer);
+				commentItem.transform.SetAsLastSibling ();
+				MoveSpacerToBottom ();
 			}
 		}
 	}
 	public void MoveSpacerToBottom()
 	{
-		if (bottomSpacer != null)
+		if (bottomSpacer != null) 
 		{
-			bottomSpacer.SetAsLastSibling();
+			bottomSpacer.SetAsLastSibling ();
 		}
 	}
 }
